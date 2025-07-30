@@ -8,34 +8,33 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// const isKycComplete = (kyc) => {
-//   return kyc && kyc.govtIdUrl && kyc.livePhotoUrl;
-// };
 
 export const signup = async (req, res) => {
   try {
     const { email, password, role } = req.body;
 
     const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: 'Email already exists' });
-    }
+    if (existingUser) return res.status(400).json({ message: 'Email already exists' });
 
     const passwordHash = await bcrypt.hash(password, 12);
 
     let kyc = undefined;
-
     if (role === 'creator') {
       if (!req.files?.govtId || !req.files?.livePhoto) {
         return res.status(400).json({ message: 'KYC documents required for creators' });
       }
 
       kyc = {
-        govtIdUrl: `/uploads/${req.files.govtId[0].filename}`,
-        livePhotoUrl: `/uploads/${req.files.livePhoto[0].filename}`,
+        govtId: {
+          data: req.files.govtId[0].buffer,
+          contentType: req.files.govtId[0].mimetype
+        },
+        livePhoto: {
+          data: req.files.livePhoto[0].buffer,
+          contentType: req.files.livePhoto[0].mimetype
+        },
         status: 'pending'
       };
-      
     }
 
     const newUser = new User({
@@ -46,8 +45,8 @@ export const signup = async (req, res) => {
     });
 
     await newUser.save();
-
     res.status(201).json({ message: 'User registered successfully' });
+
   } catch (err) {
     console.error('Signup error:', err);
     res.status(500).json({ message: 'Internal server error' });

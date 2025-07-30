@@ -5,7 +5,7 @@ const musicSchema = new mongoose.Schema({
   description: String,
   genre: String,
 
-  // Actual MP3 file stored as binary (Buffer)
+  
   musicFile: Buffer,
   musicFileType: String, // e.g., 'audio/mp3'
 

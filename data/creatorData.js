@@ -5,7 +5,8 @@ export const creators = {
       id: "1",
       name: "Alex Chen",
       walletAddress: "0x1234...5678",
-      avatar: "/assets/user-avatar.jpg", 
+      avatar: "/assets/user-avatar.jpg",
+      isVerified: true, 
       followers: 1200,
       following: 834,
       isWalletConnected: false,
@@ -18,6 +19,7 @@ export const creators = {
       isVerified: true,
       followers: "25.8K",
       following: "1.2K",
+      isWalletConnected: false,
     }
   };
   

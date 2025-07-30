@@ -10,10 +10,10 @@ import {
 
 const router = express.Router();
 
-router.get("/:listenerId", getListenerProfile);
-router.get("/:listenerId/nfts", getListenerNFTs);
-router.get("/:listenerId/vaults", getListenerVaults);
-router.get("/:listenerId/liked-songs", getLikedSongs);
-router.get("/:listenerId/following", getFollowing);
+router.get("/:userId", getListenerProfile);
+router.get("/:userId/nfts", getListenerNFTs);
+router.get("/:userId/vaults", getListenerVaults);
+router.get("/:userId/liked-songs", getLikedSongs);
+router.get("/:userId/following", getFollowing);
 
 export default router;

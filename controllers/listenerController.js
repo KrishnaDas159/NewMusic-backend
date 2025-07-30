@@ -1,30 +1,66 @@
 // backend/controllers/listenerController.js
-import { listeners, nftData, vaultStats, likedSongs, following } from "../data/listenerData.js";
+import Listener from "../models/listenerSchema.js";
+import NFT from "../models/nftSchema.js";
+import Following from "../models/following.js";
+import LikedSong from "../models/likedSong.js";
+import VaultStat from "../models/vaultStats.js";
 
+// GET Listener Profile
+export const getListenerProfile = async (req, res) => {
+  try {
+    const { userId } = req.params; // from URL params
 
-export const getListenerProfile = (req, res) => {
-  const { listenerId } = req.params;
-  const data = listeners[listenerId];
-  if (!data) return res.status(404).json({ error: "Listener not found" });
-  res.json(data);
+    const listener = await Listener.findOne({ userId });
+    if (!listener) {
+      return res.status(404).json({ error: "Listener not found" });
+    }
+    res.json(listener);
+  } catch (err) {
+    console.error("Error fetching listener profile:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
-export const getListenerNFTs = (req, res) => {
-  const { listenerId } = req.params;
-  res.json(nftData[listenerId] || []);
+// GET Listener NFTs
+export const getListenerNFTs = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const nfts = await NFT.find({ userId });
+    res.json(nfts);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
-export const getListenerVaults = (req, res) => {
-  const { listenerId } = req.params;
-  res.json(vaultStats[listenerId] || []);
+// GET Listener Vault Stats
+export const getListenerVaults = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const vaults = await VaultStat.find({ userId });
+    res.json(vaults);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
-export const getLikedSongs = (req, res) => {
-  const { listenerId } = req.params;
-  res.json(likedSongs[listenerId] || []);
+// GET Liked Songs
+export const getLikedSongs = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const songs = await LikedSong.find({ userId });
+    res.json(songs);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
-export const getFollowing = (req, res) => {
-  const { listenerId } = req.params;
-  res.json(following[listenerId] || []);
+// GET Following
+export const getFollowing = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const following = await Following.find({ userId });
+    res.json(following);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
 };

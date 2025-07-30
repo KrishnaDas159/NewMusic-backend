@@ -1,5 +1,3 @@
-//models/user.js
-
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
@@ -18,21 +16,26 @@ const userSchema = new mongoose.Schema({
     required: true 
   },
   kyc: {
-    govtIdUrl: String,
-    livePhotoUrl: String,
+    govtId: {
+      data: Buffer, 
+      contentType: String 
+    },
+    livePhoto: {
+      data: Buffer,
+      contentType: String
+    },
     status: {
       type: String,
       enum: ['pending', 'verified', 'rejected'],
       default: 'pending'
     }
   }
-  
 });
 
 // Custom validator: enforce KYC required for 'creator'
 userSchema.pre('save', function(next) {
   if (this.role === 'creator') {
-    if (!this.kyc || !this.kyc.govtIdUrl || !this.kyc.livePhotoUrl) {
+    if (!this.kyc || !this.kyc.govtId.data || !this.kyc.livePhoto.data) {
       return next(new Error('KYC documents are required for creators.'));
     }
   }
