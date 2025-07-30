@@ -51,4 +51,6 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/web3", web3Routes);
 app.use("/api/privacy", privacyRoutes);
 app.use("/api/allnotifications", allnotificationRoutes);
+
+module.exports=app;
 // Start server
